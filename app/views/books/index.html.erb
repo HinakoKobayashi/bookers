@@ -3,8 +3,12 @@
 <% @books.each do |book| %>
 
 <span>
-   <%= link_to book.title, book_path(book.id) %>  
+   <%= link_to book.title, book_path(book.id) %>
 </span>
+
+
+
+<% end %>
 
 <h2>New Books</h2>
 <!-- form_with部分 -->
@@ -14,8 +18,12 @@
 
   <h5>Body</h5>
   <%= f.text_area :body %>
-  
+
   <h5></h5>
   <%= f.submit 'Create Books' %>
 <% end %>
+
+<%= link_to "show", book_path(@book.id) %>
+<%= link_to "edit", edit_book_path(@book.id) %>
+<%= link_to "destroy", destroy_book_path(@book.id), method: :delete, "data-confirm" => "本当に削除しますか？" %>
 
