@@ -13,3 +13,20 @@
  *= require_tree .
  *= require_self
  */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header, h1, h2, h3, h5, h6 {
+font-family: verdana, arial, helvetica, sans-serif;
+}
+
+.font_bold{
+  font-weight: bold;
+}
+
+.thead {
+  padding: 1px 1px 5px;
+}
