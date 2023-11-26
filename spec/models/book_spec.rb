@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
+# これはspec/rails_helper.rbを読み込んでいます。設定などを行うファイルです
 require 'rails_helper'
 
 RSpec.describe Book, "モデルに関するテスト", type: :model do
   describe '実際に保存してみる' do
     it "有効な投稿内容の場合は保存されるか" do
+      # FactoryBot.build(:book)で作成したBookモデルのインスタンスをexpectに渡して、be_validで有効かを判定しています
       expect(FactoryBot.build(:book)).to be_valid
     end
   end
@@ -12,6 +14,7 @@ RSpec.describe Book, "モデルに関するテスト", type: :model do
     it "titleが空白の場合にバリデーションチェックされ空白のエラーメッセージが返ってきているか" do
       book = Book.new(title: '', body:'hoge')
       expect(book).to be_invalid
+      # マッチャーのincludeは配列の中身(エラーメッセージ)に"can't be blank"が含まれているかを判定します
       expect(book.errors[:title]).to include("can't be blank")
     end
     it "bodyが空白の場合にバリデーションチェックされ空白のエラーメッセージが返ってきているか" do
