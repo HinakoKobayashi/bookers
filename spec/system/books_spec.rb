@@ -30,7 +30,11 @@ describe '投稿のテスト' do
     end
     context '一覧の表示とリンクの確認' do
       it "bookの一覧表示(tableタグ)と投稿フォームが同一画面に表示されているか" do
+        # have_selectorでは特定のタグが存在しているか、また特定のタグに特定の文字列があるかなどを判定します。
+        # 今回の場合はtableタグが存在しているかを判定しています。
         expect(page).to have_selector 'table'
+        # have_fieldでは指定した値のフォームが存在するか判定します。
+        # 今回の場合はbook[title]というname属性のフォームが存在するかで判定しています。
         expect(page).to have_field 'book[title]'
         expect(page).to have_field 'book[body]'
       end
@@ -48,7 +52,12 @@ describe '投稿のテスト' do
             expect(show_link.native.inner_text).to match(/show/i)
             expect(show_link[:href]).to eq book_path(book)
             # Editリンク
+            # find_allでは指定した値（タグ）をページ中から全て検索します。
+            # 今回の場合はj番目のaタグをshow_linkに代入しています。
             show_link = find_all('a')[j+1]
+            # matchは正規表現を用いて文字列をチェックします。
+            # 「/show/i」が正規表現で、Rubyでは2本スラッシュで囲んで、最後にオプション（今回は「i」）を付けて表します。
+            # 今回の場合は、show_link内のテキストが/show/i（「show」や「Show」,「SHOW」など大文字小文字の違いを無視して判定）と一致するかどうかを判定します。
             expect(show_link.native.inner_text).to match(/edit/i)
             expect(show_link[:href]).to eq edit_book_path(book)
             # Destroyリンク
@@ -58,14 +67,24 @@ describe '投稿のテスト' do
           end
       end
       it 'Create Bookボタンが表示される' do
+        # have_buttonではボタンが存在するかを判定します。
+        # 今回の場合はボタン内の文字列の'Create Book'を指定しています。
         expect(page).to have_button 'Create Book'
       end
     end
     context '投稿処理に関するテスト' do
       it '投稿に成功しサクセスメッセージが表示されるか' do
+        # fill_inではフォームの値を変更します。通常はフォームにテキストを入力すると考えて問題ありません。
+        # 今回の場合name属性がbook[title]であるフォームを対象に指定しています。
+        # with:のあとには入力したい文字列を指定します。
+        # 今回withの後にはFaker::Lorem.characters(number:5)としていて、5桁のランダムな文字列を入力する形になっています。
         fill_in 'book[title]', with: Faker::Lorem.characters(number:5)
         fill_in 'book[body]', with: Faker::Lorem.characters(number:20)
+        # click_buttonはボタンをクリックします。
+        # ボタン内の文字列を指定します。
         click_button 'Create Book'
+        # have_contentでは指定した文字列が含まれているかを判定します。
+        # 今回の場合はページ内に「successfully」という文字列があるかを判定します。
         expect(page).to have_content 'successfully'
       end
       it '投稿に失敗する' do
@@ -77,6 +96,8 @@ describe '投稿のテスト' do
         fill_in 'book[title]', with: Faker::Lorem.characters(number:5)
         fill_in 'book[body]', with: Faker::Lorem.characters(number:20)
         click_button 'Create Book'
+        # have_current_pathでは現在のURLパスを取得します。
+        # 今回の場合は、投稿後のページURLが正しいURLパスであるかを判定しています。
         expect(page).to have_current_path book_path(Book.last)
       end
     end
